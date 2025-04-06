@@ -1,47 +1,45 @@
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("calc-form");
-    const resultDiv = document.getElementById("results");
+    const resultsDiv = document.getElementById("results");
 
-    // Завантаження даних JSON
-    fetch("modes.json")
+    fetch("data.json")
         .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
+            if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
             return response.json();
         })
-        .then(modes => {
+        .then(data => {
             form.addEventListener("submit", function (event) {
-                event.preventDefault(); // Запобігання перезавантаженню сторінки
+                event.preventDefault();
 
                 const voltage = parseFloat(document.getElementById("voltage").value);
                 const power = parseFloat(document.getElementById("power").value);
                 const mode = document.getElementById("mode").value;
 
-                // Перевірка введених даних
-                if (!voltage || !power || voltage < 0 || power < 0) {
-                    resultDiv.innerHTML = `<p style="color: red;">Будь ласка, введіть коректні значення! Дані повинні бути невід'ємними.</p>`;
+                if (!voltage || !power || voltage <= 0 || power <= 0) {
+                    resultsDiv.innerHTML = `<p style="color: red;">Введіть дійсні значення напруги та потужності!</p>`;
                     return;
                 }
 
-                const resistance = modes[mode].resistance;
-                const reactance = modes[mode].reactance;
-
-                // Розрахунок сумарного опору
+                const modeData = data.modes[mode];
+                const resistance = modeData.resistance;
+                const reactance = modeData.reactance;
                 const totalImpedance = Math.sqrt(Math.pow(resistance, 2) + Math.pow(reactance, 2));
 
-                // Розрахунок струму трифазного короткого замикання
-                const current = (power * 1000) / (Math.sqrt(3) * voltage * totalImpedance);
+                const threePhaseCurrent = (power * 1000) / (Math.sqrt(3) * voltage * totalImpedance);
+                const singlePhaseCurrent = threePhaseCurrent * 0.7;
 
-                // Виведення результатів
-                resultDiv.innerHTML = `
-                    <p><strong>Режим роботи:</strong> ${mode}</p>
+                const selectedCable = data.cables.find(cable => threePhaseCurrent <= cable.maxCurrent);
+
+                resultsDiv.innerHTML = `
+                    <h3>Результати:</h3>
                     <p><strong>Сумарний опір:</strong> ${totalImpedance.toFixed(2)} Ом</p>
-                    <p><strong>Струм трифазного короткого замикання:</strong> ${current.toFixed(2)} А</p>
+                    <p><strong>Струм трифазного КЗ:</strong> ${threePhaseCurrent.toFixed(2)} А</p>
+                    <p><strong>Струм однофазного КЗ:</strong> ${singlePhaseCurrent.toFixed(2)} А</p>
+                    <p><strong>Вибраний кабель:</strong> ${selectedCable ? selectedCable.name : "Немає відповідного кабелю"}</p>
                 `;
             });
         })
         .catch(error => {
-            resultDiv.innerHTML = `<p style="color: red;">Помилка завантаження даних: ${error.message}</p>`;
+            resultsDiv.innerHTML = `<p style="color: red;">Помилка завантаження даних: ${error.message}</p>`;
         });
 });

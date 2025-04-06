@@ -1,14 +1,35 @@
 {
-    "normal": {
+    "modes": {
+      "normal": {
         "resistance": 10.65,
         "reactance": 24.02
-    },
-    "minimum": {
+      },
+      "minimum": {
         "resistance": 34.88,
         "reactance": 65.68
-    },
-    "emergency": {
+      },
+      "emergency": {
         "resistance": 50.00,
         "reactance": 75.00
-    }
-}
+      }
+    },
+    "cables": [
+      {
+        "name": "ААБ 10 3x25",
+        "maxCurrent": 90
+      },
+      {
+        "name": "ААБ 10 3x50",
+        "maxCurrent": 120
+      },
+      {
+        "name": "ААБ 10 3x70",
+        "maxCurrent": 150
+      },
+      {
+        "name": "ААБ 10 3x95",
+        "maxCurrent": 200
+      }
+    ]
+  }
+  
