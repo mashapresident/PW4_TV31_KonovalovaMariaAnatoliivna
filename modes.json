@@ -1,0 +1,14 @@
+{
+    "normal": {
+        "resistance": 10.65,
+        "reactance": 24.02
+    },
+    "minimum": {
+        "resistance": 34.88,
+        "reactance": 65.68
+    },
+    "emergency": {
+        "resistance": 50.00,
+        "reactance": 75.00
+    }
+}
