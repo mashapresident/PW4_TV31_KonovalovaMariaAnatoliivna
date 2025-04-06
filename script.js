@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("calc-form");
     const resultsDiv = document.getElementById("results");
 
-    fetch("data.json")
+    fetch("modes.json")
         .then(response => {
             if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
             return response.json();
