@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("calc-form");
     const resultDiv = document.getElementById("results");
 
-    // Завантаження даних з JSON-файлу
+    // Завантаження даних JSON
     fetch("modes.json")
         .then(response => {
             if (!response.ok) {
@@ -12,15 +12,15 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .then(modes => {
             form.addEventListener("submit", function (event) {
-                event.preventDefault(); 
+                event.preventDefault(); // Запобігання перезавантаженню сторінки
 
                 const voltage = parseFloat(document.getElementById("voltage").value);
                 const power = parseFloat(document.getElementById("power").value);
                 const mode = document.getElementById("mode").value;
 
                 // Перевірка введених даних
-                if (!voltage || !power) {
-                    resultDiv.innerHTML = `<p style="color: red;">Будь ласка, введіть усі параметри!</p>`;
+                if (!voltage || !power || voltage < 0 || power < 0) {
+                    resultDiv.innerHTML = `<p style="color: red;">Будь ласка, введіть коректні значення! Дані повинні бути невід'ємними.</p>`;
                     return;
                 }
 
